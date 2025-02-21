@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Impact Summary & Recipes</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+    }
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      color: #222;
+    }
+    h2 {
+      font-size: 2rem;
+      color: #555;
+    }
+    
+    /* Summary Stats */
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: #f0f0f0;
+      border-radius: 10px;
+      width: 250px;
+      margin: 10px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .stat:hover {
+      transform: translateY(-5px);
+    }
+    .stat .label {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .stat .value {
+      font-size: 1.8rem;
+      color: #2196F3;
+    }
+    
+    /* Dropdown and Recipe Details */
+    .dropdown-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    select {
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      outline: none;
+      transition: border 0.3s;
+      background-color: #fff;
+      cursor: pointer;
+    }
+    select:focus {
+      border-color: #2196F3;
+    }
+    .recipe-details {
+      background: #fafafa;
+      border: 2px solid #2196F3;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .recipe-details h3 {
+      margin-top: 0;
+      font-size: 1.8rem;
+      color: #333;
+    }
+    .recipe-details p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    .recipe-details .label {
+      font-weight: 600;
+      color: #555;
+    }
+    /* Recipe image styles */
+    .recipe-image {
+      max-width: 100%;
+      border-radius: 10px;
+      margin: 15px 0;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Impact Summary</h1>
+    <div class="stats">
+      <div class="stat">
+        <span class="label">Overall CO₂ Savings</span>
+        <span class="value">{{ summary.co2_savings }} kg</span>
+      </div>
+      <div class="stat">
+        <span class="label">Overall Money Saved</span>
+        <span class="value">${{ summary.money_saved }}</span>
+      </div>
+      <div class="stat">
+        <span class="label">Recipes Used</span>
+        <span class="value">{{ summary.recipes_used }}</span>
+      </div>
+    </div>
+
+    <h2>Select a Recipe</h2>
+    <div class="dropdown-container">
+      <select id="recipeDropdown">
+        <option value="">-- Choose a Recipe --</option>
+        {% for recipe in recipes %}
+          <option value="{{ loop.index0 }}">{{ recipe.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div id="recipeDetails" class="recipe-details">
+      <img id="recipeImage" class="recipe-image" src="" alt="Recipe Image">
+      <h3 id="recipeName"></h3>
+      <p id="recipeDescription"></p>
+      <p><span class="label">CO₂ Savings:</span> <span id="recipeCO2"></span> kg</p>
+      <p><span class="label">Money Saved:</span> $<span id="recipeMoney"></span></p>
+    </div>
+  </div>
+
+  <script>
+    // Pass the recipes list from Python to JavaScript using Jinja's tojson filter
+    const recipes = {{ recipes | tojson }};
+    
+    const dropdown = document.getElementById('recipeDropdown');
+    const detailsDiv = document.getElementById('recipeDetails');
+    const recipeName = document.getElementById('recipeName');
+    const recipeDescription = document.getElementById('recipeDescription');
+    const recipeCO2 = document.getElementById('recipeCO2');
+    const recipeMoney = document.getElementById('recipeMoney');
+    const recipeImage = document.getElementById('recipeImage');
+    
+    // Listen for changes in the dropdown selection
+    dropdown.addEventListener('change', function() {
+      const selectedIndex = dropdown.value;
+      if (selectedIndex === "") {
+        detailsDiv.style.display = 'none';
+      } else {
+        const selectedRecipe = recipes[selectedIndex];
+        recipeName.textContent = selectedRecipe.name;
+        recipeDescription.textContent = selectedRecipe.description;
+        recipeCO2.textContent = selectedRecipe.co2_savings;
+        recipeMoney.textContent = selectedRecipe.money_saved;
+        recipeImage.src = selectedRecipe.image;
+        detailsDiv.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
