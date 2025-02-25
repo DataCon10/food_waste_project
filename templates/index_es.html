@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Resumen de Impacto y Recetas</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>Resumen de Impacto</h1>
+    <div class="stats">
+      <div class="stat">
+        <span class="label">Ahorro Total de CO₂</span>
+        <span class="value">{{ summary.co2_savings }} kg</span>
+      </div>
+      <div class="stat">
+        <span class="label">Dinero Total Ahorrado</span>
+        <span class="value">${{ summary.money_saved }}</span>
+      </div>
+      <div class="stat">
+        <span class="label">Recetas Utilizadas</span>
+        <span class="value">{{ summary.recipes_used }}</span>
+      </div>
+    </div>
+    
+    <!-- Dropdown para Seleccionar una Receta -->
+    <h2>Seleccione una Receta</h2>
+    <div class="dropdown-container">
+      <select id="recipeDropdown">
+        <option value="">-- Elija una Receta --</option>
+        {% for recipe in recipes %}
+          <option value="{{ loop.index0 }}">{{ recipe.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div id="recipeDetails" class="recipe-details">
+      <img id="recipeImage" src="" alt="Imagen de Receta">
+      <h3 id="recipeName"></h3>
+      <p id="recipeDescription"></p>
+      <p><span class="label">Ahorro de CO₂:</span> <span id="recipeCO2"></span> kg</p>
+      <p><span class="label">Dinero Ahorrado:</span> $<span id="recipeMoney"></span></p>
+    </div>
+    
+    <!-- Sección de Entrada de Ingredientes (con autocompletado) -->
+    <h2>¿Qué Sobras Tienes?</h2>
+    <div class="tag-input-section">
+      <div class="tag-input-container" id="tagInputContainer">
+        <input type="text" id="ingredientTagInput" placeholder="Escribe un ingrediente y presiona Enter">
+        <div id="suggestions" class="suggestions" style="display:none;"></div>
+      </div>
+      <button class="search-button" id="searchButtonTags">Buscar Recetas</button>
+    </div>
+    <div id="searchResults"></div>
+    
+    <!-- Sección del Widget de la Planta -->
+    <h2>Haz Crecer tu Jardín</h2>
+    <div id="plantWidget" class="plant-stage seed">
+      <!-- SVG en línea que representa la planta -->
+      <svg id="plantSVG" width="200" height="300" viewBox="0 0 200 300">
+        <!-- Etapa 1: Semilla (visible al inicio) -->
+        <g id="stage-seed" class="stage active">
+          <circle cx="100" cy="250" r="10" fill="#8B4513"/>
+        </g>
+        <!-- Etapa 2: Brote (oculto inicialmente) -->
+        <g id="stage-sprout" class="stage">
+          <line x1="100" y1="250" x2="100" y2="210" stroke="#8B4513" stroke-width="4"/>
+          <line x1="100" y1="230" x2="90" y2="220" stroke="#228B22" stroke-width="4"/>
+          <line x1="100" y1="230" x2="110" y2="220" stroke="#228B22" stroke-width="4"/>
+        </g>
+        <!-- Etapa 3: Planta (oculto inicialmente) -->
+        <g id="stage-plant" class="stage">
+          <line x1="100" y1="250" x2="100" y2="180" stroke="#8B4513" stroke-width="4"/>
+          <path d="M100,200 C90,1
