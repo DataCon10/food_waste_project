@@ -227,3 +227,59 @@ select {
     padding: 20px;
   }
 }
+
+
+
+
+
+/* Plant Widget Styling */
+#plantWidget {
+  text-align: center;
+  margin-top: 40px;
+}
+#plantWidget svg {
+  margin: 0 auto;
+  display: block;
+}
+
+/* Initially hide all stages except active ones */
+.stage {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.stage.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#plantMessage {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  color: #00796b;
+}
+
+#growButton {
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  background: #00796b;
+  color: #fff;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+#growButton:hover {
+  background: #004d40;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+  #plantMessage {
+    font-size: 1rem;
+  }
+}

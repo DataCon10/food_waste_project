@@ -21,7 +21,7 @@ def fetch_recipes(query="leftovers", number=50):
         "addRecipeInformation": True
     }
     response = requests.get(url, params=params)
-    response.raise_for_status()
+    response.raise_for_status() 
     return response.json().get("results", [])
 
 def upload_raw_data(data, filename):
@@ -29,6 +29,6 @@ def upload_raw_data(data, filename):
     blob_client.upload_blob(json.dumps(data), overwrite=True)
 
 if __name__ == "__main__":
-    recipes = fetch_recipes("leftovers", 50)
+    recipes = fetch_recipes("leftovers", 50 )
     upload_raw_data(recipes, "recipes_raw.json")
     print("Raw recipe data uploaded.")

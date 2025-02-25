@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Impact Summary & Recipes</title>
-  <!-- Reference the CSS file from the static folder -->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet">
 </head>
@@ -189,6 +188,76 @@
           searchResults.innerHTML = "<p>Error fetching recipes. Please try again later.</p>";
         });
     });
+
+
   </script>
+
+
+</body>
+
+
+ <!-- Plant Widget Section -->
+ <h2>Grow Your Garden</h2>
+ <div id="plantWidget" class="plant-stage seed">
+   <!-- Inline SVG representing the plant -->
+   <svg id="plantSVG" width="200" height="300" viewBox="0 0 200 300">
+     <!-- Stage 1: Seed (always visible at first) -->
+     <g id="stage-seed" class="stage active">
+       <circle cx="100" cy="250" r="10" fill="#8B4513"/>
+     </g>
+     <!-- Stage 2: Sprout (hidden initially) -->
+     <g id="stage-sprout" class="stage">
+       <line x1="100" y1="250" x2="100" y2="210" stroke="#8B4513" stroke-width="4"/>
+       <line x1="100" y1="230" x2="90" y2="220" stroke="#228B22" stroke-width="4"/>
+       <line x1="100" y1="230" x2="110" y2="220" stroke="#228B22" stroke-width="4"/>
+     </g>
+     <!-- Stage 3: Plant (hidden initially) -->
+     <g id="stage-plant" class="stage">
+       <line x1="100" y1="250" x2="100" y2="180" stroke="#8B4513" stroke-width="4"/>
+       <path d="M100,200 C90,190 80,180 80,170" stroke="#228B22" stroke-width="4" fill="none"/>
+       <path d="M100,200 C110,190 120,180 120,170" stroke="#228B22" stroke-width="4" fill="none"/>
+       <circle cx="100" cy="170" r="10" fill="#228B22"/>
+     </g>
+     <!-- More stages (e.g., full tree) can be added similarly -->
+   </svg>
+   <p id="plantMessage">Start by using a recipe to grow your plant!</p>
+   <button id="growButton">Simulate Recipe Use</button>
+ </div>
+</div>
+
+<script>
+ // Simple growth simulation using a counter
+ let growthPoints = 0;
+ const growButton = document.getElementById('growButton');
+ const plantMessage = document.getElementById('plantMessage');
+
+ // Elements for each stage
+ const stageSeed = document.getElementById('stage-seed');
+ const stageSprout = document.getElementById('stage-sprout');
+ const stagePlant = document.getElementById('stage-plant');
+
+ function updatePlantStage() {
+   // Remove "active" class from all stages
+   stageSeed.classList.remove('active');
+   stageSprout.classList.remove('active');
+   stagePlant.classList.remove('active');
+
+   if (growthPoints < 5) {
+     stageSeed.classList.add('active');
+     plantMessage.textContent = "Your seed is waiting to sprout!";
+   } else if (growthPoints < 10) {
+     stageSprout.classList.add('active');
+     plantMessage.textContent = "Look! Your sprout is growing!";
+   } else {
+     stagePlant.classList.add('active');
+     plantMessage.textContent = "Your plant is flourishing!";
+   }
+ }
+
+ growButton.addEventListener('click', function() {
+   growthPoints++;
+   updatePlantStage();
+ });
+</script>
 </body>
 </html>
